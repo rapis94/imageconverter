@@ -102,7 +102,8 @@ class imageConverter {
                     break;
                 case 4:
                     $nombreArchivo .= ".gif";
-                    $return = imagegif($lienzo, $dirSalida . $nombreArchivo, $calidad);
+                    $return = imagegif($lienzo, $dirSalida . $nombreArchivo);
+                    
                     break;
             }
 
