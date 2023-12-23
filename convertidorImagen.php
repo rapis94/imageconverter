@@ -25,7 +25,7 @@ class imageConverter {
         return $random_string;
     }
 
-    public function convertir($images, $dirSalida, $nombreArchivo, $autoGen = false, $formatoSalida = 1, $maxWidth = 600, $maxHeight = 600) {
+    public function convertir($images, $dirSalida, $nombreArchivo, $autoGen = false, $formatoSalida = 1, $calidad = 100, $maxWidth = 600, $maxHeight = 600) {
         /*
          * Parámetros:
          * $images -> En este parámetro va el $_POST['imagen'] que traigas de tu formulario.
@@ -89,19 +89,20 @@ class imageConverter {
             switch ($formatoSalida) {
                 case 1:
                     $nombreArchivo .= ".webp";
-                    $return = imagewebp($lienzo, $dirSalida . $nombreArchivo);
+                    $return = imagewebp($lienzo, $dirSalida . $nombreArchivo, $calidad);
+                    
                     break;
                 case 2:
                     $nombreArchivo .= ".jpg";
-                    $return = imagejpeg($lienzo, $dirSalida . $nombreArchivo);
+                    $return = imagejpeg($lienzo, $dirSalida . $nombreArchivo, $calidad);
                     break;
                 case 3:
                     $nombreArchivo .= ".png";
-                    $return = imagepng($lienzo, $dirSalida . $nombreArchivo);
+                    $return = imagepng($lienzo, $dirSalida . $nombreArchivo, $calidad);
                     break;
                 case 4:
                     $nombreArchivo .= ".gif";
-                    $return = imagegif($lienzo, $dirSalida . $nombreArchivo);
+                    $return = imagegif($lienzo, $dirSalida . $nombreArchivo, $calidad);
                     break;
             }
 
