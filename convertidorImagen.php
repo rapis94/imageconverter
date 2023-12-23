@@ -13,7 +13,7 @@ class imageConverter {
 
     public $lastImg = "";
     public $error = "";
-    
+
     public function generate_string($input, $strength = 16) {
         $input_length = strlen($input);
         $random_string = '';
@@ -24,12 +24,12 @@ class imageConverter {
 
         return $random_string;
     }
-    
+
     public function convertir($images, $dirSalida, $nombreArchivo, $autoGen = false, $formatoSalida = 1, $maxWidth = 600, $maxHeight = 600) {
         /*
          * Parámetros:
          * $images -> En este parámetro va el $_POST['imagen'] que traigas de tu formulario.
-         * $dirSalida -> Directorio destino donde se guardará la imagen convertida.
+         * $dirSalida -> Directorio destino donde se guardará la imagen convertida (Incluir el último / antes del nombre de la imagen aquí).
          * $nombreArchivo -> Nombre del archivo de salida.
          * $autoGen -> Decide si el nombre aportado es el nombre completo de la imagen (false) o si es un prefijo al que hay que añadirle un string autogenerado para evitar duplicados.
          * $formatoSalida -> Contendra un numero del al 4 para definir el formato de salida. 1 = WEBP, 2 = JPG, 3 = PNG y 4 = GIF
@@ -39,7 +39,7 @@ class imageConverter {
         if ($images['type'] == 'image/png' || $images['type'] == 'image/jpeg' || $images['type'] == 'image/jpg' || $images['type'] == 'image/gif' || $images['type'] == 'image/webp') {
 
             if ($autoGen) {
-                $nombreArchivo .= generate_string("abcdefghijklmnopqrstuvxyz0123456789");
+                $nombreArchivo .= $this->generate_string("abcdefghijklmnopqrstuvxyz0123456789");
             }
 
             $medidasimagen = getimagesize($images['tmp_name']);
@@ -54,9 +54,11 @@ class imageConverter {
                 case 'image/png':
                     $original = imagecreatefrompng($rtOriginal);
                     break;
+
                 case 'image/webp':
                     $original = imagecreatefromwebp($rtOriginal);
                     break;
+
                 case 'image/gif':
                     $original = imagecreatefromgif($rtOriginal);
                     break;
@@ -86,16 +88,20 @@ class imageConverter {
             imagecopyresampled($lienzo, $original, 0, 0, 0, 0, $ancho_final, $alto_final, $medidasimagen[0], $medidasimagen[1]);
             switch ($formatoSalida) {
                 case 1:
-                    $return = imagewebp($lienzo, $dirSalida . $nombreArchivo. ".webp");
+                    $nombreArchivo .= ".webp";
+                    $return = imagewebp($lienzo, $dirSalida . $nombreArchivo);
                     break;
                 case 2:
-                    $return = imagejpeg($lienzo, $dirSalida . $nombreArchivo. ".jpg");
+                    $nombreArchivo .= ".jpg";
+                    $return = imagejpeg($lienzo, $dirSalida . $nombreArchivo);
                     break;
                 case 3:
-                    $return = imagepng($lienzo, $dirSalida . $nombreArchivo. ".png");
+                    $nombreArchivo .= ".png";
+                    $return = imagepng($lienzo, $dirSalida . $nombreArchivo);
                     break;
                 case 4:
-                    $return = imagegif($lienzo, $dirSalida . $nombreArchivo. ".gif");
+                    $nombreArchivo .= ".gif";
+                    $return = imagegif($lienzo, $dirSalida . $nombreArchivo);
                     break;
             }
 
